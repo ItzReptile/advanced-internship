@@ -1,10 +1,15 @@
-import React from "react";
-import LandingImg from "../assets/landing.png"
+import React, { useState } from "react";
+import LandingImg from "../assets/landing.png";
+import { Modal } from "./UI/Modal";
 export const Landing = () => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
-
-
-
+  const modalClicked = () => {
+    setIsModalOpen(true);
+  };
+  const modalClosed = () => {
+    setIsModalOpen(false);
+  };
 
   return (
     <section id="landing">
@@ -23,7 +28,7 @@ export const Landing = () => {
                 <br className="remove--tablet" />
                 and even people who don’t like to read.
               </div>
-              <button className="btn home__cta--btn">Login</button>
+              <button onClick={modalClicked} className="btn home__cta--btn">Login</button>
             </div>
             <figure className="landing__image--mask">
               <img src={LandingImg} alt="landing" />
@@ -31,6 +36,13 @@ export const Landing = () => {
           </div>
         </div>
       </div>
+      {isModalOpen && (
+        <Modal
+          onClose={modalClosed}
+          modalClosed={modalClosed}
+          isModalOpen={isModalOpen}
+        />
+      )}
     </section>
   );
 };

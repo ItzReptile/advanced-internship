@@ -1,6 +1,29 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import google from "../../assets/google.png";
-export const Modal = ({ isModalOpen,modalClosed}) => {
+import { signInWithPopup, signOut } from "firebase/auth";
+import { auth, provider } from "../../firebase";
+
+export const Modal = ({ isModalOpen, modalClosed, onLoginSuccess }) => {
+  const [value, setValue] = useState("");
+
+  const logOut = () => {
+    localStorage.clear();
+    window.location.reload();
+  };
+
+  const sighIn = () => {
+    signInWithPopup(auth, provider).then((data) => {
+      setValue(data.user.email);
+      localStorage.setItem("email", data.user.email);
+
+      modalClosed();
+      onLoginSuccess();
+    });
+  };
+
+  useEffect(() => {
+    setValue(localStorage.getItem("email"));
+  });
   useEffect(() => {
     const body = document.body;
     if (isModalOpen) {
@@ -12,8 +35,6 @@ export const Modal = ({ isModalOpen,modalClosed}) => {
       body.style.overflow = "auto";
     };
   }, [isModalOpen]);
-
-
 
   return (
     <>
@@ -37,12 +58,19 @@ export const Modal = ({ isModalOpen,modalClosed}) => {
                   <div className="modal-border">
                     <span className="modal-border--text">or</span>
                   </div>
-                  <button className="btn log-in-google">
-                    <figure className="modal-img-wrapper">
-                      <img className="google-img" src={google} alt="" />
-                    </figure>
-                    <div>Login With Google</div>
-                  </button>
+                  {value ? (
+                    <button onClick={logOut} className="btn">
+                      logout
+                    </button>
+                  ) : (
+                    <button onClick={sighIn} className="btn log-in-google">
+                      <figure className="modal-img-wrapper">
+                        <img className="google-img" src={google} alt="" />
+                      </figure>
+                      <div>Login With Google</div>
+                    </button>
+                  )}
+
                   <div className="modal-border">
                     <span className="modal-border--text">or</span>
                   </div>
@@ -64,7 +92,7 @@ export const Modal = ({ isModalOpen,modalClosed}) => {
                     </button>
                   </form>
                 </div>
-                <div  className="forgot-password">Forgot your password?</div>
+                <div className="forgot-password">Forgot your password?</div>
                 <button className="accountless">Don't have an account?</button>
                 <div onClick={modalClosed} className="close-modal">
                   <svg

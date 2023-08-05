@@ -599,9 +599,21 @@ button:disabled {
   color: white;
   font-weight: 500;
   letter-spacing: 1px;
-
+  align-items: center;
   display: flex;
   justify-content: center;
+  position: relative;
+}
+
+.log-in-guest::before,
+.log-in-google::before {
+  content: "";
+  display: block;
+  width: 20px;
+  height: 100%;
+  position: absolute;
+  left: 0;
+  top: 0;
 }
 
 .log-in-guest {
@@ -650,8 +662,6 @@ button:disabled {
 }
 
 .modal-img-wrapper {
-  position: absolute;
-  left: 2.1rem;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -709,7 +719,7 @@ button:disabled {
   transition: opacity 0.2s;
 }
 
-.close-modal-x{
+.close-modal-x {
   width: 28px;
   height: 28px;
 }
