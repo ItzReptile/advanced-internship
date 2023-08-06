@@ -1,23 +1,15 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import logo from "../assets/logo.png";
 import { Modal } from "./UI/Modal";
-import { useNavigate } from "react-router-dom";
-export const Nav = () => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const navigate = useNavigate();
-  const modalClicked = () => {
-    setIsModalOpen(true);
-  };
-  const modalClosed = () => {
-    setIsModalOpen(false);
-  };
+import { openModal } from "../Redux/LoginSlice"
 
-  useEffect(() => {
-    if (isLoggedIn) {
-      navigate("/for-you");
-    }
-  },[isLoggedIn,navigate]);
+import { useDispatch, useSelector } from "react-redux";
+export const Nav = () => {
+  const isModalOpen = useSelector((state) => state.modal.isOpen);
+  const dispatch = useDispatch();
+  const modalClicked = () => {
+    dispatch(openModal());
+  };
 
   return (
     <nav className="nav">
@@ -35,13 +27,7 @@ export const Nav = () => {
         </ul>
       </div>
 
-      {isModalOpen && (
-        <Modal
-          onClose={modalClosed}
-          modalClosed={modalClosed}
-          isModalOpen={isModalOpen}
-        />
-      )}
+      {isModalOpen && <Modal />}
     </nav>
   );
 };

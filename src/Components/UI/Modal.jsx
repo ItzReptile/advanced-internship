@@ -2,9 +2,15 @@ import React, { useEffect, useState } from "react";
 import google from "../../assets/google.png";
 import { signInWithPopup, signOut } from "firebase/auth";
 import { auth, provider } from "../../firebase";
+import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { closeModal } from "../../Redux/LoginSlice"; 
 
-export const Modal = ({ isModalOpen, modalClosed, onLoginSuccess }) => {
+export const Modal = () => {
+  const isModalOpen = useSelector((state) => state.modal.isOpen);
   const [value, setValue] = useState("");
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const logOut = () => {
     localStorage.clear();
@@ -15,15 +21,14 @@ export const Modal = ({ isModalOpen, modalClosed, onLoginSuccess }) => {
     signInWithPopup(auth, provider).then((data) => {
       setValue(data.user.email);
       localStorage.setItem("email", data.user.email);
-
-      modalClosed();
-      onLoginSuccess();
+      navigate("/for-you");
+      dispatch(closeModal());
     });
   };
 
   useEffect(() => {
     setValue(localStorage.getItem("email"));
-  });
+  }, []);
   useEffect(() => {
     const body = document.body;
     if (isModalOpen) {
@@ -94,7 +99,7 @@ export const Modal = ({ isModalOpen, modalClosed, onLoginSuccess }) => {
                 </div>
                 <div className="forgot-password">Forgot your password?</div>
                 <button className="accountless">Don't have an account?</button>
-                <div onClick={modalClosed} className="close-modal">
+                <div onClick={closeModal} className="close-modal">
                   <svg
                     className="close-modal-x"
                     stroke="currentColor"
