@@ -1,15 +1,16 @@
 import React, { useState } from "react";
 import { BsStarFill } from "react-icons/bs";
 import { Modal } from "./UI/Modal";
+import { useDispatch, useSelector } from "react-redux";
+import { openModal } from "../Redux/LoginSlice";
 export const Reviews = () => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const dispatch  =  useDispatch()
+  const isModalOpen = useSelector((state) => state.modal.isOpen)
 
   const modalClicked = () => {
-    setIsModalOpen(true);
+    dispatch(openModal())
   };
-  const modalClosed = () => {
-    setIsModalOpen(false);
-  };
+ 
 
   return (
     <section id="reviews">
@@ -91,9 +92,7 @@ export const Reviews = () => {
       </div>
       {isModalOpen && (
         <Modal
-          onClose={modalClosed}
-          modalClosed={modalClosed}
-          isModalOpen={isModalOpen}
+
         />
       )}
     </section>

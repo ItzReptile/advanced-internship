@@ -1,29 +1,58 @@
 import React, { useEffect, useState } from "react";
 import google from "../../assets/google.png";
-import { signInWithPopup, signOut } from "firebase/auth";
-import { auth, provider } from "../../firebase";
+import { TbRefreshDot } from "react-icons/tb";
+import { signInAnonymously, signInWithPopup } from "firebase/auth";
+import { auth, provider, annom } from "../../firebase";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { closeModal } from "../../Redux/LoginSlice"; 
+import { closeModal } from "../../Redux/LoginSlice";
 
 export const Modal = () => {
   const isModalOpen = useSelector((state) => state.modal.isOpen);
   const [value, setValue] = useState("");
+  const [isGuestLoading, setIsGuestLoading] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
+
+  const isModalClose = () => {
+    dispatch(closeModal());
+  };
 
   const logOut = () => {
     localStorage.clear();
+    setIsLoggedIn(false);
     window.location.reload();
   };
 
   const sighIn = () => {
-    signInWithPopup(auth, provider).then((data) => {
-      setValue(data.user.email);
-      localStorage.setItem("email", data.user.email);
-      navigate("/for-you");
-      dispatch(closeModal());
-    });
+    setIsLoading(true);
+    signInWithPopup(auth, provider)
+      .then((data) => {
+        setValue(data.user.email);
+        localStorage.setItem("email", data.user.email);
+        navigate("/for-you");
+        dispatch(closeModal());
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+  };
+
+  const signInAnnom = () => {
+    setIsGuestLoading(true);
+    setTimeout(() => {
+      signInAnonymously(auth)
+        .then((userCredential) => {
+          setIsLoggedIn(true);
+          navigate("for-you");
+          dispatch(closeModal());
+        })
+        .finally(() => {
+          setIsGuestLoading(false);
+        });
+    }, 2500);
   };
 
   useEffect(() => {
@@ -50,16 +79,31 @@ export const Modal = () => {
               <div className="modal-base">
                 <div className="modal-content">
                   <div className="modal-title">Log In To Summarist</div>
-                  <button className="btn log-in-guest">
-                    <figure className="modal-img-wrapper">
-                      <img
-                        className="guest-img"
-                        src="https://www.pngall.com/wp-content/uploads/8/Guest-PNG-Free-Download.png"
-                        alt=""
-                      />
-                    </figure>
-                    <div>Login As A Guest</div>
-                  </button>
+                  {isGuestLoading ? (
+                    <button className="btn log-in-guest" disabled>
+                      {isGuestLoading && (
+                        <i className="loading-state-rotate">
+                          <TbRefreshDot />
+                        </i>
+                      )}
+                    </button>
+                  ) : !isLoggedIn ? (
+                    <button onClick={signInAnnom} className="btn log-in-guest">
+                      <figure className="modal-img-wrapper">
+                        <img
+                          className="guest-img"
+                          src="https://www.pngall.com/wp-content/uploads/8/Guest-PNG-Free-Download.png"
+                          alt=""
+                        />
+                      </figure>
+                      <div>Login As A Guest</div>
+                    </button>
+                  ) : (
+                    <button onClick={logOut} className="btn">
+                      logout
+                    </button>
+                  )}
+
                   <div className="modal-border">
                     <span className="modal-border--text">or</span>
                   </div>
@@ -69,10 +113,18 @@ export const Modal = () => {
                     </button>
                   ) : (
                     <button onClick={sighIn} className="btn log-in-google">
-                      <figure className="modal-img-wrapper">
-                        <img className="google-img" src={google} alt="" />
-                      </figure>
-                      <div>Login With Google</div>
+                      {isLoading ? (
+                        <i className="loading-state-rotate">
+                          <TbRefreshDot />
+                        </i>
+                      ) : (
+                        <>
+                          <figure className="modal-img-wrapper">
+                            <img className="google-img" src={google} alt="" />
+                          </figure>
+                          <div>Login With Google</div>
+                        </>
+                      )}
                     </button>
                   )}
 
@@ -99,7 +151,7 @@ export const Modal = () => {
                 </div>
                 <div className="forgot-password">Forgot your password?</div>
                 <button className="accountless">Don't have an account?</button>
-                <div onClick={closeModal} className="close-modal">
+                <div onClick={isModalClose} className="close-modal">
                   <svg
                     className="close-modal-x"
                     stroke="currentColor"

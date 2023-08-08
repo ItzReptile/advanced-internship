@@ -1,16 +1,14 @@
-import React, { useState } from "react";
+import React from "react";
 import LandingImg from "../assets/landing.png";
 import { Modal } from "./UI/Modal";
+import { useDispatch, useSelector } from "react-redux";
+import { openModal } from "../Redux/LoginSlice";
 export const Landing = () => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
+  const dispatch = useDispatch();
+  const isModalOpen = useSelector((state) => state.modal.isOpen);
   const modalClicked = () => {
-    setIsModalOpen(true);
+    dispatch(openModal());
   };
-  const modalClosed = () => {
-    setIsModalOpen(false);
-  };
-
   return (
     <section id="landing">
       <div className="container">
@@ -28,7 +26,9 @@ export const Landing = () => {
                 <br className="remove--tablet" />
                 and even people who don’t like to read.
               </div>
-              <button onClick={modalClicked} className="btn home__cta--btn">Login</button>
+              <button onClick={modalClicked} className="btn home__cta--btn">
+                Login
+              </button>
             </div>
             <figure className="landing__image--mask">
               <img src={LandingImg} alt="landing" />
@@ -36,13 +36,7 @@ export const Landing = () => {
           </div>
         </div>
       </div>
-      {isModalOpen && (
-        <Modal
-          onClose={modalClosed}
-          modalClosed={modalClosed}
-          isModalOpen={isModalOpen}
-        />
-      )}
+      {isModalOpen && <Modal />}
     </section>
   );
 };
