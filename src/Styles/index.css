@@ -740,6 +740,15 @@ button:disabled {
     transform: rotate(359deg);
   }
 }
+/* FOR-YOU-WRAPPER */
+
+.wrapper {
+  position: relative;
+  margin-left: 200px;
+  flex-direction: column;
+  display: flex;
+  transition: all 0.3s;
+}
 
 /* SIDE-BAR-LEFT */
 
@@ -804,13 +813,7 @@ button:disabled {
   padding-left: 16px;
 }
 
-.wrapper {
-  position: relative;
-  margin-left: 200px;
-  flex-direction: column;
-  display: flex;
-  transition: all 0.3s;
-}
+/* SEARCH */
 
 .search-wrapper {
   display: flex;
@@ -854,6 +857,12 @@ button:disabled {
   padding-left: 8px;
 }
 
+/* FOR-YOU-HEADER*/
+
+.for-you-section {
+  margin: 12px 0;
+}
+
 .for-you-title {
   margin-bottom: 16px;
   color: #044466;
@@ -888,10 +897,33 @@ button:disabled {
   display: flex;
 }
 
+.for-you-books-wrapper {
+  padding: 16px;
+  margin-right: 12px;
+  transition: all 100ms;
+  position: relative;
+}
+.premium {
+  position: absolute;
+  top: 0;
+  right: 0;
+  font-size: 10px;
+  background-color: #032b41;
+  border-radius: 99px;
+  color: white;
+  padding: 4px;
+}
+
+.for-you-books-wrapper:hover {
+  background-color: #f1f6f4;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
 .for-you-book-img-wrapper {
-  height: 140px;
-  width: 140px;
-  min-width: 140px;
+  height: 150px;
+  width: 150px;
+  min-width: 150px;
 }
 
 .for-you-book-img {
@@ -916,7 +948,6 @@ button:disabled {
   color: #032b41;
 }
 
-
 .for-you-book-right {
   width: 100%;
 }
@@ -932,4 +963,67 @@ button:disabled {
   color: #394547;
   margin-bottom: 16px;
   font-weight: 400;
+}
+
+/* FOR-YOU-BOOKS*/
+
+.for-you-books-length-wrapper {
+  display: flex;
+}
+
+.for-you-section-title {
+  font-size: 20px;
+  color: #032b41;
+  margin-bottom: 10px;
+}
+
+.for-you-section-subtitle {
+  font-size: 16px;
+  font-weight: 300;
+  color: #032b41;
+  margin-bottom: 10px;
+}
+.for-you-books-title {
+  font-size: 16px;
+  max-width: 175px;
+  letter-spacing: 0.25px;
+  margin: 8px 0;
+  color: #032b41;
+}
+
+.for-you-book-img-wrappers {
+  width: 200px;
+  min-width: 200px;
+  height: 200px;
+}
+
+.for-you-books-author {
+  font-weight: 300;
+  letter-spacing: 0.4px;
+  margin: 8px 0;
+}
+
+.for-you-books-subtitle {
+  font-weight: 300;
+  font-size: 14px;
+  margin-bottom: 6px;
+}
+
+.for-you-books-display {
+  display: flex;
+}
+
+.for-you-books-icons {
+  font-size: 20px;
+}
+
+.for-you-books-duration {
+  padding-top: 2px;
+}
+.for-you-books-ratings {
+  padding-top: 2px;
+}
+
+.skeleton-box{
+  background-color: #a9b5bd;
 }

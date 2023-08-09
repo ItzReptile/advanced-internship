@@ -62,7 +62,7 @@ export const LeftBar = () => {
             <i className="sidebar-nav-icon">
               <BiLogIn />
             </i>
-            <h1 className="sidebar-nav-title">Log</h1>
+            <h1 className="sidebar-nav-title">Login</h1>
           </div>
         </div>
       </div>
