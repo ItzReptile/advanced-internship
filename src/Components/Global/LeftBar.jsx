@@ -5,7 +5,9 @@ import { FaPencilAlt } from "react-icons/fa";
 import { BiLogIn } from "react-icons/bi";
 import { BsSearch, BsFillGearFill } from "react-icons/bs";
 import summary from "../../assets/logo.png";
+import { Link } from "react-router-dom";
 export const LeftBar = () => {
+
   return (
     <div className="sidebar">
       <figure className="sidebar-img-wrapper">
@@ -13,13 +15,16 @@ export const LeftBar = () => {
       </figure>
       <div className="sidebar-wrapper">
         <div className="sidebar-navs">
-          <div className="sidebar-nav">
-            <div className="sidebar-deactive sidebar-active"></div>
-            <i className="sidebar-nav-icon">
-              <AiOutlineHome />
-            </i>
-            <h1 className="sidebar-nav-title">For you</h1>
-          </div>
+          <Link to={"/for-you"}>
+            <div className="sidebar-nav">
+              <div className="sidebar-deactive sidebar-active"></div>
+              <i className="sidebar-nav-icon">
+                <AiOutlineHome />
+              </i>
+
+              <h1 className="sidebar-nav-title">For you</h1>
+            </div>
+          </Link>
           <div className="sidebar-nav">
             <div className="sidebar-deactive sidebar-active"></div>
             <i className="sidebar-nav-icon">
@@ -46,14 +51,14 @@ export const LeftBar = () => {
           <div className="sidebar-nav">
             <div className="sidebar-deactive sidebar-active"></div>
             <i className="sidebar-nav-icon">
-              < BsFillGearFill />
+              <BsFillGearFill />
             </i>
             <h1 className="sidebar-nav-title">Settings</h1>
           </div>
           <div className="sidebar-nav">
             <div className="sidebar-deactive sidebar-active"></div>
             <i className="sidebar-nav-icon">
-              <AiFillQuestionCircle/>
+              <AiFillQuestionCircle />
             </i>
             <h1 className="sidebar-nav-title">Help & Support</h1>
           </div>
