@@ -3,6 +3,7 @@ import { LeftBar } from "../Components/Global/LeftBar";
 import { SearchNav } from "../Components/Global/SearchNav";
 import { AiFillPlayCircle, AiFillStar } from "react-icons/ai";
 import { IoIosTimer } from "react-icons/io";
+import { Link } from "react-router-dom";
 import { Skelly } from "../Components/Global/Skelly";
 import axios from "axios";
 
@@ -61,14 +62,16 @@ export const ForYou = () => {
               <div className="for-you-header">
                 {isLoading ? (
                   <div>
-                    <h2 className="for-you-title"><Skelly width={150} height={20}/> </h2>
+                    <h2 className="for-you-title">
+                      <Skelly width={150} height={20} />{" "}
+                    </h2>
                     <Skelly width={700} height={200} />
                   </div>
                 ) : (
                   bookData.map((book, index) => (
                     <>
                       <h2 className="for-you-title">Selected just for you</h2>
-                      <a className="for-you-book" href={book.id}>
+                      <Link className="for-you-book" href={book.id}>
                         <div className="for-you-book-left">
                           <h3 className="for-you-book-subtitle">
                             {book.subTitle}
@@ -99,7 +102,7 @@ export const ForYou = () => {
                             </div>
                           </div>
                         </div>
-                      </a>
+                      </Link>
                     </>
                   ))
                 )}
@@ -133,7 +136,11 @@ export const ForYou = () => {
                         </div>
                       ))
                     : booksData.slice(0, 5).map((books, index) => (
-                        <a  href={books.id} className="for-you-books-wrapper"  key={index}>
+                        <Link
+                        to={`/book/${books.id}`}
+                          className="for-you-books-wrapper"
+                          key={index}
+                        >
                           {books.subscriptionRequired && (
                             <div className="premium">Premium</div>
                           )}
@@ -163,7 +170,7 @@ export const ForYou = () => {
                               {books.averageRating}
                             </h5>
                           </div>
-                        </a>
+                        </Link>
                       ))}
                 </div>
               </div>
@@ -197,7 +204,11 @@ export const ForYou = () => {
                         </div>
                       ))
                     : suggested.slice(0, 5).map((books, index) => (
-                        <a href={books.id} className="for-you-books-wrapper" key={index}>
+                        <Link
+                        to={`/book/${books.id}`}
+                          className="for-you-books-wrapper"
+                          key={index}
+                        >
                           {books.subscriptionRequired && (
                             <div className="premium">Premium</div>
                           )}
@@ -227,7 +238,7 @@ export const ForYou = () => {
                               {books.averageRating}
                             </h5>
                           </div>
-                        </a>
+                        </Link>
                       ))}
                 </div>
               </div>

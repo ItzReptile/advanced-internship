@@ -1024,6 +1024,52 @@ button:disabled {
   padding-top: 2px;
 }
 
-.skeleton-box{
+.skeleton-box {
   background-color: #a9b5bd;
+}
+
+
+.book-content{
+  margin-left: 200px;
+}
+
+.book-content-header{
+  display: flex;
+}
+
+.book-content-img-wrapper{
+  max-width: 300px;
+  margin: 0 auto;
+}
+
+.book-content-img{
+  width: 100%;
+}
+
+.book-content-title{
+  margin: 12px 0;
+}
+
+
+.book-content-add{
+  display: flex;
+  flex-wrap: wrap;
+  max-width: 250px;
+  row-gap: 12px;
+}
+
+.book-content-wrapper{
+  margin-right: 12px;
+  display: flex;
+  
+}
+
+.book-content-icon{
+  font-size: 24px;
+}
+
+.book-content-icon-text{
+  font-size: 14px;
+  margin-top: 4px;
+
 }
