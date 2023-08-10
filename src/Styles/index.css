@@ -1181,7 +1181,79 @@ button:disabled {
   z-index: 9998;
 }
 
-.audio-track-title{
-  font-size: 12px;
+.audio-track {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: calc(100% / 3);
+}
+
+.audio-track-text {
+  width: 225px;
+  padding-left: 12px;
+}
+
+.audio-track-img-wrapper {
+  max-width: 50px;
+  margin-bottom: 6px;
+  height: 50px;
+}
+
+.audio-track-img {
+  width: 100%;
+}
+
+.audio-track-title {
+  font-size: 14px;
   color: white;
+  font-weight: 400;
+}
+
+.audio-track-author {
+  color: rgb(92, 103, 110);
+  font-weight: 400;
+  padding-top: 4px;
+}
+
+.audio-btns {
+  width: calc(100% / 3);
+  display: flex;
+  justify-content: center;
+}
+
+.audio-btns-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.audio-btn-control {
+  font-size: 40px;
+  color: white;
+}
+
+.audio-btn-play {
+  font-size: 50px;
+}
+
+.audio-length {
+  width: calc(100% / 3);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.audio-length-time {
+  color: white;
+}
+
+
+
+.audio-length-duration {
+  border-radius: 8px;
+  height: 4px;
+  width: 100%;
+  max-width: 300px;
+  cursor: pointer;
 }
