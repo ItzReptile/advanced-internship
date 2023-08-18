@@ -8,12 +8,15 @@ import { useParams } from "react-router-dom";
 
 export const Book = () => {
   const { id } = useParams();
+  const [audioSrc, setAudioSrc] = useState("");
+  const [isPlaying, setIsPlaying] = useState(false);
   const [bookData, setBookData] = useState({});
   async function fetchBookID() {
     try {
       const response = await axios.get(
         `https://us-central1-summaristt.cloudfunctions.net/getBook?id=${id}`
       );
+      setAudioSrc(response.data.audioLink);
       setBookData(response.data);
       console.log(response.data);
     } catch (error) {
@@ -23,6 +26,9 @@ export const Book = () => {
   useEffect(() => {
     fetchBookID();
   }, []);
+  const togglePlay = () => {
+    setIsPlaying(!isPlaying);
+  };
   return (
     <>
       <SearchNav />
@@ -50,13 +56,13 @@ export const Book = () => {
           </div>
           <div className="audio-btns">
             <div className="audio-btns-wrapper">
-              <button className="audio-btn-control">
+              <button onClick={() => console.log("rewind button clicked")} className="audio-btn-control">
                 <MdReplay10 />
               </button>
-              <button className="audio-btn-control audio-btn-play">
-                <AiFillPlayCircle />
+              <button onClick={togglePlay} className="audio-btn-control audio-btn-play">
+              {isPlaying ? <PauseIcon/> : <AiFillPlayCircle />}
               </button>
-              <button className="audio-btn-control">
+              <button onClick={() => console.log("forward bytton clicked")} className="audio-btn-control">
                 <MdForward10 />
               </button>
             </div>
