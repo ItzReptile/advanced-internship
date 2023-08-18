@@ -5,12 +5,11 @@ import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { Provider } from "react-redux";
 import { store } from "./Redux/store";
-import './Styles/progress.css'
-import AudioPlayer from "./Components/Audio/AudioPlayer";
+import "./Styles/progress.css";
+
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
-    <AudioPlayer/>
     <Provider store={store}>
       <App />
     </Provider>

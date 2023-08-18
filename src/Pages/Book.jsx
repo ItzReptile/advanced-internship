@@ -3,7 +3,7 @@ import { SearchNav } from "../Components/Global/SearchNav";
 import { LeftBar } from "../Components/Global/LeftBar";
 import axios from "axios";
 import { MdReplay10, MdForward10 } from "react-icons/md";
-import { AiFillPlayCircle } from "react-icons/ai";
+import { AiFillPlayCircle ,AiFillPauseCircle} from "react-icons/ai";
 import { useParams } from "react-router-dom";
 
 export const Book = () => {
@@ -18,7 +18,7 @@ export const Book = () => {
       );
       setAudioSrc(response.data.audioLink);
       setBookData(response.data);
-      console.log(response.data);
+      console.log(response.data.audioLink);
     } catch (error) {
       console.error("Error fetching book data:", error);
     }
@@ -60,7 +60,7 @@ export const Book = () => {
                 <MdReplay10 />
               </button>
               <button onClick={togglePlay} className="audio-btn-control audio-btn-play">
-              {isPlaying ? <PauseIcon/> : <AiFillPlayCircle />}
+              {isPlaying ? <AiFillPauseCircle/> : <AiFillPlayCircle />}
               </button>
               <button onClick={() => console.log("forward bytton clicked")} className="audio-btn-control">
                 <MdForward10 />
@@ -74,6 +74,7 @@ export const Book = () => {
           </div>
         </div>
       </div>
+      <audio src={audioSrc} controls={true} autoPlay={isPlaying}></audio>
     </>
   );
 };
