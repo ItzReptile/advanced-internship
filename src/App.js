@@ -5,7 +5,8 @@ import "./Styles/index.css";
 import { ForYou } from "./Pages/ForYou";
 import { BookContent } from "./Pages/BookContent";
 import { Book } from "./Pages/Book";
-function App({summary,subTitle}) {
+import { ChoosePlan } from "./Pages/ChoosePlan";
+function App() {
   return (
     <>
       <Router>
@@ -14,6 +15,7 @@ function App({summary,subTitle}) {
           <Route path="/for-you" element={<ForYou />} />
           <Route path="/book/:id" element={<BookContent />} />
           <Route path="/player/:id" element={<Book/>}/>
+          <Route path="/choose-plan" element={<ChoosePlan/>}/>
         </Routes>
       </Router>
     </>

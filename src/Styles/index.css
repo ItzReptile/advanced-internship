@@ -1248,8 +1248,6 @@ button:disabled {
   color: white;
 }
 
-
-
 .audio-length-duration {
   border-radius: 8px;
   height: 4px;
@@ -1258,7 +1256,27 @@ button:disabled {
   cursor: pointer;
 }
 
-.audio-player{
-  position: absolute;
+.choose-plan {
+  width: 100%;
+}
 
+.choose-plan-header {
+  position: relative;
+  text-align: center;
+  width: 100%;
+  padding-top: 48px;
+  margin-bottom: 24px;
+}
+
+.choose-plan-header:before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: -1;
+  width: 100%;
+  height: 100%;
+  background-color: #032b41;
+  border-bottom-right-radius: 16rem;
+  border-bottom-left-radius: 16rem;
 }

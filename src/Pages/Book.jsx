@@ -1,4 +1,4 @@
-import React, { useEffect, useState ,useRef} from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { SearchNav } from "../Components/Global/SearchNav";
 import { LeftBar } from "../Components/Global/LeftBar";
 import axios from "axios";
@@ -13,7 +13,9 @@ export const Book = () => {
   const [bookData, setBookData] = useState({});
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
-  const audioRef = useRef(null)
+  const audioRef = useRef(null);
+  const progressBarRef = useRef(null);
+
   async function fetchBookID() {
     try {
       const response = await axios.get(
@@ -29,39 +31,58 @@ export const Book = () => {
   useEffect(() => {
     fetchBookID();
   }, []);
-
   useEffect(() => {
     const audioElement = audioRef.current;
 
-    if (audioElement) {
-      audioElement.addEventListener("canplaythrough", handleAudioLoad);
-      audioElement.addEventListener("timeupdate", handleTimeUpdate);
-      audioElement.addEventListener("durationchange", handleDurationChange);
+    const handleTimeUpdate = () => {
+      setCurrentTime(audioElement.currentTime);
+    };
 
-      return () => {
-        audioElement.removeEventListener("canplaythrough", handleAudioLoad);
-        audioElement.removeEventListener("timeupdate", handleTimeUpdate);
-        audioElement.removeEventListener(
-          "durationchange",
-          handleDurationChange
-        );
-      };
-    }
+    audioElement.addEventListener("timeupdate", handleTimeUpdate);
+
+    return () => {
+      audioElement.removeEventListener("timeupdate", handleTimeUpdate);
+    };
   }, []);
-  const togglePlay = () => {
-    setIsPlaying(!isPlaying);
+  const handleRewind = () => {
+    if (audioRef.current) {
+      const newTime = Math.max(0, audioRef.current.currentTime - 10);
+      setCurrentTime(newTime);
+      audioRef.current.currentTime = newTime;
+    }
   };
-  const handleAudioLoad = () => {
-    setCurrentTime(audioRef.current.currentTime);
-    setDuration(audioRef.current.duration);
+  
+  const handleForward = () => {
+    if (audioRef.current) {
+      const newTime = Math.min(duration, audioRef.current.currentTime + 10);
+      setCurrentTime(newTime);
+      audioRef.current.currentTime = newTime;
+    }
   };
 
-  const handleTimeUpdate = () => {
-    setCurrentTime(audioRef.current.currentTime);
+  const togglePlayPause = () => {
+    if (audioRef.current) {
+      if (isPlaying) {
+        audioRef.current.pause();
+      } else {
+        audioRef.current.play();
+      }
+    }
+    setIsPlaying((prev) => !prev);
+  };
+
+  const handleAudioLoad = () => {
+    setCurrentTime(0);
+    setDuration(audioRef.current.duration);
   };
 
   const handleDurationChange = () => {
     setDuration(audioRef.current.duration);
+  };
+
+  const handleAudioEnded = () => {
+    togglePlayPause();
+    setCurrentTime(0);
   };
 
   const formatTime = (time) => {
@@ -69,6 +90,7 @@ export const Book = () => {
     const seconds = Math.floor(time % 60);
     return `${minutes}:${seconds.toString().padStart(2, "0")}`;
   };
+
   return (
     <>
       <SearchNav />
@@ -97,19 +119,19 @@ export const Book = () => {
           <div className="audio-btns">
             <div className="audio-btns-wrapper">
               <button
-                onClick={() => console.log("rewind button clicked")}
+                  onClick={handleRewind}
                 className="audio-btn-control"
               >
                 <MdReplay10 />
               </button>
               <button
-                onClick={togglePlay}
                 className="audio-btn-control audio-btn-play"
+                onClick={togglePlayPause}
               >
                 {isPlaying ? <AiFillPauseCircle /> : <AiFillPlayCircle />}
               </button>
               <button
-                onClick={() => console.log("forward bytton clicked")}
+                onClick={handleForward}
                 className="audio-btn-control"
               >
                 <MdForward10 />
@@ -119,17 +141,29 @@ export const Book = () => {
           <div className="audio-length">
             <div className="audio-length-time">{formatTime(currentTime)}</div>
             <input
-          type="range"
-          className="audio-length-duration"
-          value={currentTime}
-          max={duration}
-          onChange={(e) => (audioRef.current.currentTime = e.target.value)}
-        />
+              type="range"
+              className="audio-length-duration"
+              value={currentTime}
+              max={duration}
+              onChange={(e) => {
+                const newTime = parseFloat(e.target.value);
+                setCurrentTime(newTime);
+                audioRef.current.currentTime = newTime;
+              }}
+            />
             <div className="audio-length-time">{formatTime(duration)}</div>
           </div>
         </div>
       </div>
-      <audio src={audioSrc} controls={true} autoPlay={isPlaying}></audio>
+      <audio
+        ref={audioRef}
+        src={audioSrc}
+        controls={true}
+        onLoadedMetadata={() => {
+          setDuration(audioRef.current?.duration || 0);
+        }}
+        onEnded={handleAudioEnded}
+      />
     </>
   );
 };
