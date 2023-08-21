@@ -1447,3 +1447,7 @@ padding: 12px 0;
   font-weight: 400;
   margin: 12px 0;
 }
+
+.library-wrapper{
+  width: 100%;
+}

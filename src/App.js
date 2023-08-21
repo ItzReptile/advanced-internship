@@ -6,6 +6,8 @@ import { ForYou } from "./Pages/ForYou";
 import { BookContent } from "./Pages/BookContent";
 import { Book } from "./Pages/Book";
 import { ChoosePlan } from "./Pages/ChoosePlan";
+import { Library } from "./Pages/Library";
+
 function App() {
   return (
     <>
@@ -16,6 +18,7 @@ function App() {
           <Route path="/book/:id" element={<BookContent />} />
           <Route path="/player/:id" element={<Book/>}/>
           <Route path="/choose-plan" element={<ChoosePlan/>}/>
+          <Route path="/library" element={<Library/>}/>
         </Routes>
       </Router>
     </>

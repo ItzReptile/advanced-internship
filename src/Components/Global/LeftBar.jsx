@@ -7,7 +7,6 @@ import { BsSearch, BsFillGearFill } from "react-icons/bs";
 import summary from "../../assets/logo.png";
 import { Link } from "react-router-dom";
 export const LeftBar = () => {
-
   return (
     <div className="sidebar">
       <figure className="sidebar-img-wrapper">
@@ -25,13 +24,17 @@ export const LeftBar = () => {
               <h1 className="sidebar-nav-title">For you</h1>
             </div>
           </Link>
-          <div className="sidebar-nav">
-            <div className="sidebar-deactive sidebar-active"></div>
-            <i className="sidebar-nav-icon">
-              <RiFlag2Line />
-            </i>
-            <h1 className="sidebar-nav-title">My Library</h1>
-          </div>
+
+          <Link to={"/library"}>
+            <div className="sidebar-nav">
+              <div className="sidebar-deactive sidebar-active"></div>
+              <i className="sidebar-nav-icon">
+                <RiFlag2Line />
+              </i>
+              <h1 className="sidebar-nav-title">My Library</h1>
+            </div>
+          </Link>
+
           <div className="sidebar-nav">
             <div className="sidebar-deactive sidebar-active"></div>
             <i className="sidebar-nav-icon">

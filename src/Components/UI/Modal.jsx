@@ -43,7 +43,7 @@ export const Modal = () => {
   const signInAnnom = () => {
     setIsGuestLoading(true);
     setTimeout(() => {
-      signInAnonymously(auth)
+      signInAnonymously(auth,provider)
         .then((userCredential) => {
           setIsLoggedIn(true);
           navigate("for-you");
