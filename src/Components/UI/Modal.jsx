@@ -2,16 +2,16 @@ import React, { useEffect, useState } from "react";
 import google from "../../assets/google.png";
 import { TbRefreshDot } from "react-icons/tb";
 import { signInAnonymously, signInWithPopup } from "firebase/auth";
-import { auth, provider, annom } from "../../firebase";
+import { auth, provider } from "../../firebase";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { closeModal } from "../../Redux/LoginSlice";
-
+import { logIn, logOut } from "../../Redux/authSlice";
 export const Modal = () => {
   const isModalOpen = useSelector((state) => state.modal.isOpen);
+  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
   const [value, setValue] = useState("");
   const [isGuestLoading, setIsGuestLoading] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
@@ -20,40 +20,34 @@ export const Modal = () => {
     dispatch(closeModal());
   };
 
-  const logOut = () => {
+  const handleLogin = (email) => {
+    setValue(email);
+    localStorage.setItem("email", email);
+    navigate("/for-you");
+    dispatch(closeModal());
+    dispatch(logIn())
+  };
+
+  const handleLogout = () => {
     localStorage.clear();
-    setIsLoggedIn(false);
     window.location.reload();
+    dispatch(logOut()); 
   };
-
-  const sighIn = () => {
-    setIsLoading(true);
-    signInWithPopup(auth, provider)
-      .then((data) => {
-        setValue(data.user.email);
-        localStorage.setItem("email", data.user.email);
-        navigate("/for-you");
-        dispatch(closeModal());
-      })
-      .finally(() => {
-        setIsLoading(false);
-      });
-  };
-
   const signInAnnom = () => {
     setIsGuestLoading(true);
     setTimeout(() => {
-      signInAnonymously(auth,provider)
+      signInAnonymously(auth, provider)
         .then((userCredential) => {
-          setIsLoggedIn(true);
           navigate("for-you");
           dispatch(closeModal());
+          dispatch(logIn()); // Dispatch the logIn action
         })
         .finally(() => {
           setIsGuestLoading(false);
         });
     }, 2500);
   };
+
 
   useEffect(() => {
     setValue(localStorage.getItem("email"));
@@ -99,7 +93,7 @@ export const Modal = () => {
                       <div>Login As A Guest</div>
                     </button>
                   ) : (
-                    <button onClick={logOut} className="btn">
+                    <button onClick={handleLogout} className="btn">
                       logout
                     </button>
                   )}
@@ -108,11 +102,11 @@ export const Modal = () => {
                     <span className="modal-border--text">or</span>
                   </div>
                   {value ? (
-                    <button onClick={logOut} className="btn">
+                    <button onClick={handleLogout} className="btn">
                       logout
                     </button>
                   ) : (
-                    <button onClick={sighIn} className="btn log-in-google">
+                    <button onClick={handleLogin} className="btn log-in-google">
                       {isLoading ? (
                         <i className="loading-state-rotate">
                           <TbRefreshDot />

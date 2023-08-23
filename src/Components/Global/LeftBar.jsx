@@ -2,11 +2,24 @@ import React, { useState } from "react";
 import { AiOutlineHome, AiFillQuestionCircle } from "react-icons/ai";
 import { RiFlag2Line } from "react-icons/ri";
 import { FaPencilAlt } from "react-icons/fa";
-import { BiLogIn } from "react-icons/bi";
+import { BiLogIn,BiLogOut } from "react-icons/bi";
 import { BsSearch, BsFillGearFill } from "react-icons/bs";
 import summary from "../../assets/logo.png";
 import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { logOut } from "../../Redux/authSlice";
 export const LeftBar = () => {
+  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
+  const isModalOpen = useSelector((state) => state.modal.isOpen);
+  const dispatch = useDispatch();
+  const HandleloginNlogout = () => {
+    if (isLoggedIn) {
+      dispatch(logOut());
+    } else {
+      dispatch(isModalOpen());
+    }
+  };
+
   return (
     <div className="sidebar">
       <figure className="sidebar-img-wrapper">
@@ -65,12 +78,16 @@ export const LeftBar = () => {
             </i>
             <h1 className="sidebar-nav-title">Help & Support</h1>
           </div>
-          <div className="sidebar-nav">
+          <div className="sidebar-nav" >
             <div className="sidebar-deactive sidebar-active"></div>
             <i className="sidebar-nav-icon">
-              <BiLogIn />
+            {isLoggedIn ? (
+            <BiLogOut onClick={HandleloginNlogout} />
+          ) : (
+            <BiLogIn onClick={HandleloginNlogout} />
+          )}
             </i>
-            <h1 className="sidebar-nav-title">Login</h1>
+            <h1 className="sidebar-nav-title"> {isLoggedIn ? "Logout" : "Login"}</h1>
           </div>
         </div>
       </div>
