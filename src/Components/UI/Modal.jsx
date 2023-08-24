@@ -1,7 +1,11 @@
 import React, { useEffect, useState } from "react";
 import google from "../../assets/google.png";
 import { TbRefreshDot } from "react-icons/tb";
-import { signInAnonymously, signInWithPopup } from "firebase/auth";
+import {
+  signInAnonymously,
+  signInWithPopup,
+createUserWithEmailAndPassword
+} from "firebase/auth";
 import { auth, provider } from "../../firebase";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
@@ -15,7 +19,8 @@ export const Modal = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
-
+  const [emailValue, setEmailValue] = useState("");
+  const [passwordValue, setPasswordValue] = useState("");
   const isModalClose = () => {
     dispatch(closeModal());
   };
@@ -25,13 +30,13 @@ export const Modal = () => {
     localStorage.setItem("email", email);
     navigate("/for-you");
     dispatch(closeModal());
-    dispatch(logIn())
+    dispatch(logIn());
   };
 
   const handleLogout = () => {
     localStorage.clear();
     window.location.reload();
-    dispatch(logOut()); 
+    dispatch(logOut());
   };
   const signInAnnom = () => {
     setIsGuestLoading(true);
@@ -48,6 +53,32 @@ export const Modal = () => {
     }, 2500);
   };
 
+  const handleEmailChange = (event) => {
+    setEmailValue(event.target.value);
+  };
+  
+  const handlePasswordChange = (event) => {
+    setPasswordValue(event.target.value);
+  };
+
+  const handleRegistration = (email, password) => {
+    setIsLoading(true);
+    createUserWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+        // Successfully registered user
+        const user = userCredential.user;
+        console.log("Registered user:", user.uid);
+        setIsLoading(false);
+        // You can perform additional actions after successful registration
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        console.error("Error registering user:", errorMessage);
+        setIsLoading(false);
+        // Handle registration error if needed
+      });
+  };
 
   useEffect(() => {
     setValue(localStorage.getItem("email"));
@@ -125,21 +156,30 @@ export const Modal = () => {
                   <div className="modal-border">
                     <span className="modal-border--text">or</span>
                   </div>
-                  <form className="modal-main--form" action="">
+                  <form
+                    className="modal-main--form"
+                    onSubmit={(e) => e.preventDefault()}
+                  >
                     <input
                       className="input-form"
                       required
-                      type="text"
+                      type="text" 
+                      onChange={handleEmailChange}
                       placeholder="Email Address"
                     />
                     <input
                       className="input-form"
                       required
                       type="text"
-                      placeholder="Password"
+                      placeholder="Password" onChange={handlePasswordChange}
                     />
-                    <button className="btn">
-                      <span>Login</span>
+                    <button
+                      onClick={() =>
+                        handleRegistration(emailValue, passwordValue)
+                      }
+                      className="btn"
+                    >
+                      <span>Register</span>
                     </button>
                   </form>
                 </div>
