@@ -40,24 +40,24 @@ export const LeftBar = () => {
             </div>
           </Link>
 
-          <Link to={"/library"}>
-            <div className="sidebar-nav">
+  
+            <div className="sidebar-nav"  style={{cursor:"no-drop"}}>
               <div className="sidebar-deactive sidebar-active"></div>
               <i className="sidebar-nav-icon">
                 <RiFlag2Line />
               </i>
               <h1 className="sidebar-nav-title">My Library</h1>
             </div>
-          </Link>
+         
 
-          <div className="sidebar-nav">
+          <div   style={{cursor:"no-drop"}} className="sidebar-nav">
             <div className="sidebar-deactive sidebar-active"></div>
             <i className="sidebar-nav-icon">
               <FaPencilAlt />
             </i>
             <h1 className="sidebar-nav-title">Highlights</h1>
           </div>
-          <div className="sidebar-nav">
+          <div  style={{cursor:"no-drop"}} className="sidebar-nav">
             <div className="sidebar-deactive sidebar-active"></div>
             <i className="sidebar-nav-icon">
               <BsSearch />
@@ -73,12 +73,12 @@ export const LeftBar = () => {
             </i>
             <h1 className="sidebar-nav-title">Settings</h1>
           </div>
-          <div className="sidebar-nav">
+          <div className="sidebar-nav"  style={{cursor:"no-drop"}}>
             <div className="sidebar-deactive sidebar-active"></div>
             <i className="sidebar-nav-icon">
               <AiFillQuestionCircle />
             </i>
-            <h1 className="sidebar-nav-title">Help & Support</h1>
+            <h1  className="sidebar-nav-title">Help & Support</h1>
           </div>
           <div className="sidebar-nav" onClick={handleWork} >
             <div className="sidebar-deactive sidebar-active"></div>

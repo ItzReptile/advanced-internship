@@ -6,8 +6,11 @@ import { IoIosTimer } from "react-icons/io";
 import { Link } from "react-router-dom";
 import { Skelly } from "../Components/Global/Skelly";
 import axios from "axios";
+import { useDispatch, useSelector } from "react-redux";
 
 export const ForYou = () => {
+
+  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
   const [bookData, setBookData] = useState([]);
   const [booksData, setBooksData] = useState([]);
   const [suggested, setSuggested] = useState([]);
@@ -18,6 +21,15 @@ export const ForYou = () => {
     setBooksData,
     setSuggested,
   };
+
+  const dispatch = useDispatch();
+  const guestLogin = () => {
+    if(isLoggedIn){
+      return true
+    }
+    return false
+  }
+
 
   const endpoints = [
     { status: "selected", stateSetter: "setBookData" },
@@ -137,13 +149,15 @@ export const ForYou = () => {
                       ))
                     : booksData.slice(0, 5).map((books, index) => (
                         <Link
-                        to={`/book/${books.id}`}
+                          to={`/book/${books.id}`}
                           className="for-you-books-wrapper"
                           key={index}
                         >
-                          {books.subscriptionRequired && (
+                          {!isLoggedIn &&  books.subscriptionRequired && (
                             <div className="premium">Premium</div>
                           )}
+                          
+                          
                           <figure className="for-you-book-img-wrappers">
                             <img
                               className="for-you-book-img"
@@ -205,11 +219,11 @@ export const ForYou = () => {
                       ))
                     : suggested.slice(0, 5).map((books, index) => (
                         <Link
-                        to={`/book/${books.id}`}
+                          to={`/book/${books.id}`}
                           className="for-you-books-wrapper"
                           key={index}
                         >
-                          {books.subscriptionRequired && (
+                          {!guestLogin && books.subscriptionRequired && (
                             <div className="premium">Premium</div>
                           )}
                           <figure className="for-you-book-img-wrappers">

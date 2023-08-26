@@ -18,7 +18,11 @@ export const SearchNav = () => {
   };
   const handleSearch = (event) => {
     const searchTerm = event.target.value;
-    bookSearch(searchTerm);
+    if (searchTerm.length >= 1) {
+      bookSearch(searchTerm);
+    } else{
+      setfetchData([])
+    }
   };
   return (
     <div className="search-wrapper">
@@ -29,7 +33,7 @@ export const SearchNav = () => {
         <div className="search-button">
           <input
             placeholder="Search for books"
-            type="Search"
+            type="search"
             className="search-btn"
             onChange={handleSearch}
           />

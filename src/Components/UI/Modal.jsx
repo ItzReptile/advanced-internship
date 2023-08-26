@@ -24,7 +24,9 @@ export const Modal = () => {
   const [emailValue, setEmailValue] = useState("");
   const [passwordValue, setPasswordValue] = useState("");
   const [accountless, setAccountless] = useState(true);
+
   const [show, setShow] = useState(false);
+  const isLoggedInStorage = localStorage.getItem("IsLoggedIn") === "true";
   const isModalClose = () => {
     dispatch(closeModal());
   };
@@ -49,15 +51,38 @@ export const Modal = () => {
     navigate("/for-you");
     dispatch(closeModal());
     dispatch(logIn());
+    localStorage.setItem("isLoggedIn", "true");
   };
 
   const handleLogout = () => {
     localStorage.clear();
     window.location.reload();
     dispatch(logOut());
+    localStorage.removeItem("IsLoggedIn")
   };
+
+  const handleGoogleLogin = () => {
+    setIsLoading(true);
+    signInWithPopup(auth, provider)
+      .then((userCredential) => {
+        const user = userCredential.user;
+        console.log("Logged in user:", user.uid);
+        setIsLoading(false);
+        dispatch(closeModal());
+        dispatch(logIn()); 
+        localStorage.setItem("IsLoggedIn","true")
+      })
+      .catch((error) => {
+        const errorMessage = error.message;
+        console.error("Error logging in with Google:", errorMessage);
+        setIsLoading(false);
+        seterrorMessage(errorMessage);
+      });
+  };
+
   const signInAnnom = () => {
     setIsGuestLoading(true);
+
     setTimeout(() => {
       signInAnonymously(auth, provider)
         .then((userCredential) => {
@@ -89,16 +114,22 @@ export const Modal = () => {
         dispatch(logIn());
       })
       .catch((error) => {
-        const errorMessage = error.message; // Corrected property name: "message" instead of "errorMessage"
+        const errorMessage = error.message;
         console.error("Error logging in:", errorMessage);
         setIsLoading(false);
         seterrorMessage(errorMessage);
-        // Handle login error if needed
       });
   };
 
   useEffect(() => {
     setValue(localStorage.getItem("email"));
+  }, []);
+
+  useEffect(() => {
+    const storedLoginState = localStorage.getItem("isLoggedIn");
+    if (storedLoginState === "true") {
+      isLoggedIn(true);
+    }
   }, []);
 
   useEffect(() => {
@@ -177,7 +208,10 @@ export const Modal = () => {
                       logout
                     </button>
                   ) : (
-                    <button onClick={handleLogin} className="btn log-in-google">
+                    <button
+                      onClick={handleGoogleLogin}
+                      className="btn log-in-google"
+                    >
                       {isLoading ? (
                         <i className="loading-state-rotate">
                           <TbRefreshDot />
