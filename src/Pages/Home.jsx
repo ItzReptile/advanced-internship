@@ -1,4 +1,4 @@
-import React  from "react";
+import React from "react";
 import { Nav } from "../Components/Nav";
 import { Landing } from "../Components/Landing";
 import { Features } from "../Components/Features";
@@ -7,6 +7,8 @@ import { Reviews } from "../Components/Reviews";
 import { Footer } from "../Components/Footer";
 
 export const Home = () => {
+
+
   return (
     <>
       <Nav />
@@ -15,6 +17,9 @@ export const Home = () => {
       <Reviews />
       <Numbers />
       <Footer />
+    
     </>
   );
 };
+
+

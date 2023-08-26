@@ -4,7 +4,8 @@ import { TbRefreshDot } from "react-icons/tb";
 import {
   signInAnonymously,
   signInWithPopup,
-createUserWithEmailAndPassword
+  signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
 } from "firebase/auth";
 import { auth, provider } from "../../firebase";
 import { useNavigate } from "react-router-dom";
@@ -19,12 +20,29 @@ export const Modal = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
+  const [errorMessage, seterrorMessage] = useState("");
   const [emailValue, setEmailValue] = useState("");
   const [passwordValue, setPasswordValue] = useState("");
+  const [accountless, setAccountless] = useState(true);
+  const [show, setShow] = useState(false);
   const isModalClose = () => {
     dispatch(closeModal());
   };
-
+  const handleSignUp = () => {
+    setIsLoading(true);
+    createUserWithEmailAndPassword(auth, emailValue, passwordValue)
+      .then((userCredential) => {
+        const user = userCredential.user;
+        console.log("User created:", user.uid);
+        setIsLoading(false);
+      })
+      .catch((error) => {
+        const errorMessage = error.message;
+        console.error("Error creating user:", errorMessage);
+        setIsLoading(false);
+        seterrorMessage(errorMessage);
+      });
+  };
   const handleLogin = (email) => {
     setValue(email);
     localStorage.setItem("email", email);
@@ -56,33 +74,33 @@ export const Modal = () => {
   const handleEmailChange = (event) => {
     setEmailValue(event.target.value);
   };
-  
+
   const handlePasswordChange = (event) => {
     setPasswordValue(event.target.value);
   };
-
-  const handleRegistration = (email, password) => {
+  const handleLoginWithEmailAndPassword = () => {
     setIsLoading(true);
-    createUserWithEmailAndPassword(auth, email, password)
+    signInWithEmailAndPassword(auth, emailValue, passwordValue)
       .then((userCredential) => {
-        // Successfully registered user
         const user = userCredential.user;
-        console.log("Registered user:", user.uid);
+        console.log("Logged in user:", user.uid);
         setIsLoading(false);
-        // You can perform additional actions after successful registration
+        dispatch(closeModal());
+        dispatch(logIn());
       })
       .catch((error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        console.error("Error registering user:", errorMessage);
+        const errorMessage = error.message; // Corrected property name: "message" instead of "errorMessage"
+        console.error("Error logging in:", errorMessage);
         setIsLoading(false);
-        // Handle registration error if needed
+        seterrorMessage(errorMessage);
+        // Handle login error if needed
       });
   };
 
   useEffect(() => {
     setValue(localStorage.getItem("email"));
   }, []);
+
   useEffect(() => {
     const body = document.body;
     if (isModalOpen) {
@@ -95,6 +113,11 @@ export const Modal = () => {
     };
   }, [isModalOpen]);
 
+  useEffect(() => {
+    if (isLoggedIn) {
+      navigate("/for-you");
+    }
+  }, [isLoggedIn, navigate]);
   return (
     <>
       <div className="modal-overlay">
@@ -103,35 +126,52 @@ export const Modal = () => {
             <div className="modal-wrapper">
               <div className="modal-base">
                 <div className="modal-content">
-                  <div className="modal-title">Log In To Summarist</div>
-                  {isGuestLoading ? (
-                    <button className="btn log-in-guest" disabled>
-                      {isGuestLoading && (
-                        <i className="loading-state-rotate">
-                          <TbRefreshDot />
-                        </i>
-                      )}
-                    </button>
-                  ) : !isLoggedIn ? (
-                    <button onClick={signInAnnom} className="btn log-in-guest">
-                      <figure className="modal-img-wrapper">
-                        <img
-                          className="guest-img"
-                          src="https://www.pngall.com/wp-content/uploads/8/Guest-PNG-Free-Download.png"
-                          alt=""
-                        />
-                      </figure>
-                      <div>Login As A Guest</div>
-                    </button>
-                  ) : (
-                    <button onClick={handleLogout} className="btn">
-                      logout
-                    </button>
-                  )}
-
-                  <div className="modal-border">
-                    <span className="modal-border--text">or</span>
+                  <div className="error">
+                    {errorMessage && (
+                      <div className="error-message">{errorMessage}</div>
+                    )}
                   </div>
+                  {accountless && (
+                    <div className="modal-title">Log In To Summarist</div>
+                  )}
+                  {show && (
+                    <div className="modal-title">Sign Up To Summarist</div>
+                  )}
+                  {accountless && (
+                    <>
+                      {isGuestLoading ? (
+                        <button className="btn log-in-guest" disabled>
+                          {isGuestLoading && (
+                            <i className="loading-state-rotate">
+                              <TbRefreshDot />
+                            </i>
+                          )}
+                        </button>
+                      ) : !isLoggedIn ? (
+                        <button
+                          onClick={signInAnnom}
+                          className="btn log-in-guest"
+                        >
+                          <figure className="modal-img-wrapper">
+                            <img
+                              className="guest-img"
+                              src="https://www.pngall.com/wp-content/uploads/8/Guest-PNG-Free-Download.png"
+                              alt=""
+                            />
+                          </figure>
+                          <div>Login As A Guest</div>
+                        </button>
+                      ) : (
+                        <button onClick={handleLogout} className="btn">
+                          logout
+                        </button>
+                      )}
+
+                      <div className="modal-border">
+                        <span className="modal-border--text">or</span>
+                      </div>
+                    </>
+                  )}
                   {value ? (
                     <button onClick={handleLogout} className="btn">
                       logout
@@ -152,39 +192,91 @@ export const Modal = () => {
                       )}
                     </button>
                   )}
-
                   <div className="modal-border">
                     <span className="modal-border--text">or</span>
                   </div>
-                  <form
-                    className="modal-main--form"
-                    onSubmit={(e) => e.preventDefault()}
-                  >
-                    <input
-                      className="input-form"
-                      required
-                      type="text" 
-                      onChange={handleEmailChange}
-                      placeholder="Email Address"
-                    />
-                    <input
-                      className="input-form"
-                      required
-                      type="text"
-                      placeholder="Password" onChange={handlePasswordChange}
-                    />
-                    <button
-                      onClick={() =>
-                        handleRegistration(emailValue, passwordValue)
-                      }
-                      className="btn"
+                  {accountless && (
+                    <form
+                      className="modal-main--form"
+                      onSubmit={(e) => e.preventDefault()}
                     >
-                      <span>Register</span>
-                    </button>
-                  </form>
+                      <input
+                        className="input-form"
+                        required
+                        type="text"
+                        onChange={handleEmailChange}
+                        placeholder="Email Address"
+                        value={emailValue}
+                      />
+                      <input
+                        className="input-form"
+                        required
+                        type="text"
+                        placeholder="Password"
+                        onChange={handlePasswordChange}
+                        value={passwordValue}
+                      />
+                      <button onClick={handleSignUp} className="btn">
+                        <span>Login</span>
+                      </button>
+                    </form>
+                  )}{" "}
+                  {show && (
+                    <form
+                      className="modal-main--form"
+                      onSubmit={(e) => e.preventDefault()}
+                    >
+                      <input
+                        className="input-form"
+                        required
+                        type="text"
+                        onChange={handleEmailChange}
+                        placeholder="Email Address"
+                        value={emailValue}
+                      />
+                      <input
+                        className="input-form"
+                        required
+                        type="text"
+                        placeholder="Password"
+                        onChange={handlePasswordChange}
+                        value={passwordValue}
+                      />
+                      <button
+                        onClick={createUserWithEmailAndPassword}
+                        className="btn"
+                      >
+                        <span>Sign Up</span>
+                      </button>
+                    </form>
+                  )}
                 </div>
-                <div className="forgot-password">Forgot your password?</div>
-                <button className="accountless">Don't have an account?</button>
+                {accountless && (
+                  <>
+                    <div className="forgot-password">Forgot your password?</div>
+                    <button
+                      onClick={() => {
+                        setAccountless(false);
+                        setShow(true);
+                      }}
+                      className="accountless"
+                    >
+                      Don't have an account?
+                    </button>
+                  </>
+                )}
+                {show && (
+                  <>
+                    <div>
+                      <button
+                        onClick={() => setShow(true)}
+                        className="accountless"
+                      >
+                        Already Have An Account?
+                      </button>
+                    </div>
+                  </>
+                )}
                 <div onClick={isModalClose} className="close-modal">
                   <svg
                     className="close-modal-x"
