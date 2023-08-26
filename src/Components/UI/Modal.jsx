@@ -61,7 +61,7 @@ export const Modal = () => {
     setTimeout(() => {
       signInAnonymously(auth, provider)
         .then((userCredential) => {
-          navigate("for-you");
+          navigate("/for-you");
           dispatch(closeModal());
           dispatch(logIn()); // Dispatch the logIn action
         })

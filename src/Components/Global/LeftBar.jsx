@@ -8,15 +8,17 @@ import summary from "../../assets/logo.png";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { logOut } from "../../Redux/authSlice";
+import { openModal } from "../../Redux/LoginSlice";
+import { Modal } from "../UI/Modal";
 export const LeftBar = () => {
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
   const isModalOpen = useSelector((state) => state.modal.isOpen);
   const dispatch = useDispatch();
-  const HandleloginNlogout = () => {
+  const handleWork = () => {
     if (isLoggedIn) {
       dispatch(logOut());
     } else {
-      dispatch(isModalOpen());
+      dispatch(openModal());
     }
   };
 
@@ -78,19 +80,21 @@ export const LeftBar = () => {
             </i>
             <h1 className="sidebar-nav-title">Help & Support</h1>
           </div>
-          <div className="sidebar-nav" >
+          <div className="sidebar-nav" onClick={handleWork} >
             <div className="sidebar-deactive sidebar-active"></div>
             <i className="sidebar-nav-icon">
             {isLoggedIn ? (
-            <BiLogOut onClick={HandleloginNlogout} />
+            <BiLogOut onClick={handleWork} />
           ) : (
-            <BiLogIn onClick={HandleloginNlogout} />
+            <BiLogIn onClick={handleWork} />
           )}
             </i>
-            <h1 className="sidebar-nav-title"> {isLoggedIn ? "Logout" : "Login"}</h1>
+            <h1  className="sidebar-nav-title"> {isLoggedIn ? "Logout" : "Login"}</h1>
           </div>
         </div>
       </div>
+      {isModalOpen && <Modal />}
     </div>
+    
   );
 };
