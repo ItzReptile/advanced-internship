@@ -42,6 +42,11 @@ export const SearchNav = () => {
           </i>
         </div>
       </div>
+      <div className="search-button-burger">
+        <i>
+        <BsSearch />
+        </i>
+      </div>
       {fetchData.length > 0 && (
         <div className="search-results">
           <ul className="search-results-wrapper">
