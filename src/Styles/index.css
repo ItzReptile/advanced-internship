@@ -1589,6 +1589,13 @@ button:disabled {
   .for-you-book-left{
     width: 100%;
   }
+  .search-wrapper{
+    display: flex;
+    justify-content: end;
+  }
+  .search-button-burger{
+    
+  }
 }
 
 @media(max-width:500px){
