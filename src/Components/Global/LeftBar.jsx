@@ -66,6 +66,7 @@ export const LeftBar = () => {
           </div>
         </div>
         <div className="sidebar-bottom">
+          <Link to={"/Settings"}>
           <div className="sidebar-nav">
             <div className="sidebar-deactive sidebar-active"></div>
             <i className="sidebar-nav-icon">
@@ -73,6 +74,8 @@ export const LeftBar = () => {
             </i>
             <h1 className="sidebar-nav-title">Settings</h1>
           </div>
+          </Link>
+          
           <div className="sidebar-nav"  style={{cursor:"no-drop"}}>
             <div className="sidebar-deactive sidebar-active"></div>
             <i className="sidebar-nav-icon">

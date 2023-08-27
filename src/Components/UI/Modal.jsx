@@ -3,9 +3,10 @@ import google from "../../assets/google.png";
 import { TbRefreshDot } from "react-icons/tb";
 import {
   signInAnonymously,
-  signInWithPopup,
+GoogleAuthProvider,
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
+  signInWithPopup,
 } from "firebase/auth";
 import { auth, provider } from "../../firebase";
 import { useNavigate } from "react-router-dom";
@@ -21,12 +22,12 @@ export const Modal = () => {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, seterrorMessage] = useState("");
+  const [success, setSuccessMessage] = useState("");
   const [emailValue, setEmailValue] = useState("");
   const [passwordValue, setPasswordValue] = useState("");
   const [accountless, setAccountless] = useState(true);
-
   const [show, setShow] = useState(false);
-  const isLoggedInStorage = localStorage.getItem("IsLoggedIn") === "true";
+
   const isModalClose = () => {
     dispatch(closeModal());
   };
@@ -37,6 +38,7 @@ export const Modal = () => {
         const user = userCredential.user;
         console.log("User created:", user.uid);
         setIsLoading(false);
+        setSuccessMessage("User created");
       })
       .catch((error) => {
         const errorMessage = error.message;
@@ -45,20 +47,12 @@ export const Modal = () => {
         seterrorMessage(errorMessage);
       });
   };
-  const handleLogin = (email) => {
-    setValue(email);
-    localStorage.setItem("email", email);
-    navigate("/for-you");
-    dispatch(closeModal());
-    dispatch(logIn());
-    localStorage.setItem("isLoggedIn", "true");
-  };
 
   const handleLogout = () => {
     localStorage.clear();
     window.location.reload();
     dispatch(logOut());
-    localStorage.removeItem("IsLoggedIn")
+    localStorage.removeItem("IsLoggedIn");
   };
 
   const handleGoogleLogin = () => {
@@ -69,8 +63,9 @@ export const Modal = () => {
         console.log("Logged in user:", user.uid);
         setIsLoading(false);
         dispatch(closeModal());
-        dispatch(logIn()); 
-        localStorage.setItem("IsLoggedIn","true")
+        dispatch(logIn());
+        navigate("/for-you");
+        localStorage.setItem("IsLoggedIn", "true");
       })
       .catch((error) => {
         const errorMessage = error.message;
@@ -88,7 +83,7 @@ export const Modal = () => {
         .then((userCredential) => {
           navigate("/for-you");
           dispatch(closeModal());
-          dispatch(logIn()); // Dispatch the logIn action
+          dispatch(logIn());
         })
         .finally(() => {
           setIsGuestLoading(false);
@@ -128,7 +123,7 @@ export const Modal = () => {
   useEffect(() => {
     const storedLoginState = localStorage.getItem("isLoggedIn");
     if (storedLoginState === "true") {
-      isLoggedIn(true);
+      dispatch(logIn());
     }
   }, []);
 
@@ -160,6 +155,9 @@ export const Modal = () => {
                   <div className="error">
                     {errorMessage && (
                       <div className="error-message">{errorMessage}</div>
+                    )}
+                    {success && (
+                      <div className="error-message">{success}</div>
                     )}
                   </div>
                   {accountless && (
@@ -250,7 +248,10 @@ export const Modal = () => {
                         onChange={handlePasswordChange}
                         value={passwordValue}
                       />
-                      <button onClick={handleSignUp} className="btn">
+                      <button
+                        onClick={handleLoginWithEmailAndPassword}
+                        className="btn"
+                      >
                         <span>Login</span>
                       </button>
                     </form>
@@ -276,10 +277,7 @@ export const Modal = () => {
                         onChange={handlePasswordChange}
                         value={passwordValue}
                       />
-                      <button
-                        onClick={createUserWithEmailAndPassword}
-                        className="btn"
-                      >
+                      <button onClick={handleSignUp} className="btn">
                         <span>Sign Up</span>
                       </button>
                     </form>
@@ -287,7 +285,12 @@ export const Modal = () => {
                 </div>
                 {accountless && (
                   <>
-                    <div className="forgot-password">Forgot your password?</div>
+                    <div
+                      style={{ cursor: "no-drop" }}
+                      className="forgot-password"
+                    >
+                      Forgot your password?
+                    </div>
                     <button
                       onClick={() => {
                         setAccountless(false);
@@ -303,7 +306,10 @@ export const Modal = () => {
                   <>
                     <div>
                       <button
-                        onClick={() => setShow(true)}
+                        onClick={() => {
+                          setAccountless(true);
+                          setShow(false);
+                        }}
                         className="accountless"
                       >
                         Already Have An Account?

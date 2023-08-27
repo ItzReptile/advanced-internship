@@ -1,6 +1,6 @@
 @import url("https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&display=swap");
 
-.error{
+.error {
   color: red;
   margin-bottom: 8px;
 }
@@ -1472,10 +1472,9 @@ button:disabled {
   background-color: #fff;
   border: 1px solid #e1e7ea;
   box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.14);
-
 }
 
-.search-wrapper-results{
+.search-wrapper-results {
   border-bottom: solid 1px #dadadb;
   display: flex;
   padding: 12px 0;
@@ -1490,18 +1489,58 @@ button:disabled {
   width: 100px;
 }
 
-.search-book-details-wrapper{
- padding-left: 10px;
- text-align: start;
+.search-book-details-wrapper {
+  padding-left: 10px;
+  text-align: start;
 }
 
-.search-results-book{
+.search-results-book {
   color: #044466;
   font-size: 16px;
 }
 
-.search-results-author{
+.search-results-author {
   margin-top: 8px;
   font-size: 14px;
   color: #044466;
+}
+
+.settings-title {
+  border-bottom: solid 1px #dfe4e6;
+  padding-bottom: 12px;
+}
+
+.settings-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.settings-img-wrapper {
+  width: 500px;
+  padding: 12px 0;
+}
+
+.settings-details{
+  padding: 12px 0;
+  color: #044466;
+}
+
+.settings-img {
+  width: 100%;
+}
+
+.sub-status{
+  padding: 18px 0;
+  border-bottom: solid 1px #bac8ce;
+
+}
+
+.sub-title{
+  color: #044466;
+}
+.sub-status-des{
+  font-size: 16px;
+  margin-top: 10px;
+  font-weight: 400;
 }
