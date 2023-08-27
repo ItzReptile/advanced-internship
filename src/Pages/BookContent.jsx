@@ -6,17 +6,33 @@ import { PiFlagBannerBold, PiFlagBannerFill } from "react-icons/pi";
 import { BsFillMicFill, BsFillBookmarksFill } from "react-icons/bs";
 import { FaRegLightbulb } from "react-icons/fa";
 import { BiBookReader } from "react-icons/bi";
-import { Link, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { LeftBar } from "../Components/Global/LeftBar";
 import { SearchNav } from "../Components/Global/SearchNav";
+import { useSelector, useDispatch } from "react-redux";
+import { openModal } from "../Redux/LoginSlice";
 
 export const BookContent = () => {
   const { id } = useParams();
+  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
   const [favBook, setfavBook] = useState(false);
   const [bookData, setBookData] = useState({});
   const [isLoading, setisLoading] = useState(true);
+  const dispatch = useDispatch();
+
+
+  const navigate = useNavigate()
   const handleFavBook = () => {
     setfavBook(!favBook);
+  };
+
+
+  const handleReadButtonClick = () => {
+    if (!isLoggedIn) {
+      dispatch(openModal());
+    } else {
+      navigate(`/player/${bookData.id}`);
+    }
   };
 
   async function fetchBookID() {
@@ -39,6 +55,7 @@ export const BookContent = () => {
 
   return (
     <>
+     
       <LeftBar />
       <SearchNav />
       <div className="book-content">
@@ -129,24 +146,24 @@ export const BookContent = () => {
                   </>
                 ) : (
                   <div className="book-content-btn-wrappers">
-                    <Link
-                      to={`/player/${bookData.id}`}
+                    <div style={{cursor:"pointer"}}
+                      onClick={handleReadButtonClick}
                       className="book-content-btn"
                     >
                       <i className="book-content-icon">
                         <BiBookReader />
                       </i>
                       Read
-                    </Link>
-                    <Link
-                      to={`/player/${bookData.id}`}
+                    </div>
+                    <div style={{cursor:"pointer"}}
+                      onClick={handleReadButtonClick}
                       className="book-content-btn"
                     >
                       <i className="book-content-icon">
                         <BsFillMicFill />
                       </i>
                       Listen
-                    </Link>
+                    </div>
                   </div>
                 )}
                 {isLoading ? (
@@ -192,13 +209,14 @@ export const BookContent = () => {
                     <div className="book-content-btn-wrappers">
                       {bookData.tags &&
                         bookData.tags.map((tag, index) => (
-                          <Link
+                          <div
+                            style={{ cursor: "no-drop" }}
                             key={index}
                             to={`/player/${bookData.id}`}
                             className="book-content-btn-library"
                           >
                             {tag}
-                          </Link>
+                          </div>
                         ))}
                     </div>
 

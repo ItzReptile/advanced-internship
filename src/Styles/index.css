@@ -1016,6 +1016,9 @@ button:disabled {
 
 .for-you-books-display {
   display: flex;
+  overflow-x: auto;
+  scroll-snap-type: mandatory;
+  scroll-snap-type: x;
 }
 
 .for-you-books-icons {
@@ -1468,10 +1471,15 @@ button:disabled {
   padding: 16px;
   position: absolute;
   top: 104px;
+  z-index: 99999;
   right: 24px;
   background-color: #fff;
   border: 1px solid #e1e7ea;
   box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.14);
+}
+
+.sidebar-wrapper-modified{
+  height: calc(100vh - 140px);
 }
 
 .search-wrapper-results {
@@ -1517,7 +1525,7 @@ button:disabled {
 }
 
 .settings-img-wrapper {
-  width: 500px;
+  max-width: 500px;
   padding: 12px 0;
 }
 
@@ -1543,4 +1551,49 @@ button:disabled {
   font-size: 16px;
   margin-top: 10px;
   font-weight: 400;
+}
+
+@media (max-width:1200px) {
+  .for-you-book{
+    width: 100%;
+    max-width: none;
+  }
+}
+
+@media(max-width:992px){
+.book-content-header{
+  flex-direction: column;
+}
+.book-content-comprehensive{
+  order: 1;
+}
+.book-content-img-wrappers{
+  display: flex;
+  justify-content: center;
+}
+}
+
+@media(max-width:768px){
+  .sidebar{
+    display: none;
+  }
+  .wrapper{
+    margin: 0;
+  }
+  .book-content{
+    margin: 0;
+  }
+  .for-you-book{
+    flex-direction: column;
+  }
+  .for-you-book-left{
+    width: 100%;
+  }
+}
+
+@media(max-width:500px){
+  .book-content-btn{
+    width: 100%;
+    max-width: none;
+  }
 }
