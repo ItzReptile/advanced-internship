@@ -76,6 +76,10 @@ button:disabled {
   background-color: #20ba68;
 }
 
+.search-button-burger {
+  display: none;
+}
+
 .btn:active {
   transform: translateY(1px);
 }
@@ -767,6 +771,19 @@ button:disabled {
   background-color: #f7faf9;
   z-index: 1000;
   transition: all 0.3s;
+}
+
+.sidebar-mini {
+  position: fixed;
+  left: 0;
+  top: 0;
+  height: 100vh;
+  width: 360px;
+  min-width: 200px;
+  background-color: #f7faf9;
+  z-index: 1000;
+  transition: all 0.3s;
+  
 }
 
 .sidebar-wrapper {
@@ -1478,7 +1495,7 @@ button:disabled {
   box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.14);
 }
 
-.sidebar-wrapper-modified{
+.sidebar-wrapper-modified {
   height: calc(100vh - 140px);
 }
 
@@ -1529,7 +1546,7 @@ button:disabled {
   padding: 12px 0;
 }
 
-.settings-details{
+.settings-details {
   padding: 12px 0;
   color: #044466;
 }
@@ -1538,69 +1555,80 @@ button:disabled {
   width: 100%;
 }
 
-.sub-status{
+.sub-status {
   padding: 18px 0;
   border-bottom: solid 1px #bac8ce;
-
 }
 
-.sub-title{
+.sub-title {
   color: #044466;
 }
-.sub-status-des{
+.sub-status-des {
   font-size: 16px;
   margin-top: 10px;
   font-weight: 400;
 }
 
-@media (max-width:1200px) {
-  .for-you-book{
+@media (max-width: 1200px) {
+  .for-you-book {
     width: 100%;
     max-width: none;
   }
 }
 
-@media(max-width:992px){
-.book-content-header{
-  flex-direction: column;
-}
-.book-content-comprehensive{
-  order: 1;
-}
-.book-content-img-wrappers{
-  display: flex;
-  justify-content: center;
-}
-}
-
-@media(max-width:768px){
-  .sidebar{
-    display: none;
-  }
-  .wrapper{
-    margin: 0;
-  }
-  .book-content{
-    margin: 0;
-  }
-  .for-you-book{
+@media (max-width: 992px) {
+  .book-content-header {
     flex-direction: column;
   }
-  .for-you-book-left{
+  .book-content-comprehensive {
+    order: 1;
+  }
+  .book-content-img-wrappers {
+    display: flex;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 768px) {
+  .sidebar {
+    display: none;
+  }
+
+  .wrapper {
+    margin: 0;
+  }
+  .book-content {
+    margin: 0;
+  }
+  .for-you-book {
+    flex-direction: column;
+  }
+  .for-you-book-left {
     width: 100%;
   }
-  .search-wrapper{
+  .search-wrapper {
     display: flex;
     justify-content: end;
   }
-  .search-button-burger{
-    
+  .icon-size {
+    font-size: 20px;
+  }
+  .search-button-burger {
+    display: block;
+    margin-left: 16px;
+    margin-top: 6px;
+    cursor: pointer;
+  }
+  .choose-plan-benefits{
+    display: flex;
+    flex-direction: column;
   }
 }
 
-@media(max-width:500px){
-  .book-content-btn{
+@media (max-width: 500px) {
+  .book-content-btn {
     width: 100%;
     max-width: none;
   }
+
 }

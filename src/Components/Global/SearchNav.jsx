@@ -1,9 +1,13 @@
 import axios from "axios";
 import React, { useState } from "react";
 import { BsSearch } from "react-icons/bs";
+import { LBM } from "./LBM";
 import { Link } from "react-router-dom";
+import { GiHamburgerMenu } from "react-icons/gi";
+import { AiOutlineClose } from "react-icons/ai";
 export const SearchNav = () => {
   const [fetchData, setfetchData] = useState([]);
+  const [isLeftBarVisible, setIsLeftBarVisible] = useState(false);
 
   const bookSearch = async function (search) {
     try {
@@ -20,9 +24,12 @@ export const SearchNav = () => {
     const searchTerm = event.target.value;
     if (searchTerm.length >= 1) {
       bookSearch(searchTerm);
-    } else{
-      setfetchData([])
+    } else {
+      setfetchData([]);
     }
+  };
+  const displayLeft = () => {
+    setIsLeftBarVisible(!isLeftBarVisible);
   };
   return (
     <div className="search-wrapper">
@@ -37,16 +44,22 @@ export const SearchNav = () => {
             className="search-btn"
             onChange={handleSearch}
           />
-          <i className="search-icon">
+          <i  className="search-icon">
             <BsSearch />
           </i>
         </div>
       </div>
       <div className="search-button-burger">
-        <i>
-        <BsSearch />
-        </i>
-      </div>
+  {isLeftBarVisible ? (
+    <i className="icon-size" onClick={displayLeft}>
+      <AiOutlineClose />
+    </i>
+  ) : (
+    <i className="icon-size" onClick={displayLeft}>
+      <GiHamburgerMenu />
+    </i>
+  )}
+</div>
       {fetchData.length > 0 && (
         <div className="search-results">
           <ul className="search-results-wrapper">
@@ -66,6 +79,7 @@ export const SearchNav = () => {
           </ul>
         </div>
       )}
+      {isLeftBarVisible && <LBM/>}
     </div>
   );
 };
