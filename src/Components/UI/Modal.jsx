@@ -3,10 +3,11 @@ import google from "../../assets/google.png";
 import { TbRefreshDot } from "react-icons/tb";
 import {
   signInAnonymously,
-GoogleAuthProvider,
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
   signInWithPopup,
+  setPersistence,
+  inMemoryPersistence,
 } from "firebase/auth";
 import { auth, provider } from "../../firebase";
 import { useNavigate } from "react-router-dom";
@@ -31,14 +32,16 @@ export const Modal = () => {
   const isModalClose = () => {
     dispatch(closeModal());
   };
-  const handleSignUp = () => {
+  const handleSignUp = async () => {
     setIsLoading(true);
-    createUserWithEmailAndPassword(auth, emailValue, passwordValue)
+    await setPersistence(auth, inMemoryPersistence);
+    await createUserWithEmailAndPassword(auth, emailValue, passwordValue)
       .then((userCredential) => {
         const user = userCredential.user;
         console.log("User created:", user.uid);
         setIsLoading(false);
         setSuccessMessage("User created");
+    
       })
       .catch((error) => {
         const errorMessage = error.message;
@@ -52,27 +55,28 @@ export const Modal = () => {
     localStorage.clear();
     window.location.reload();
     dispatch(logOut());
-    localStorage.removeItem("IsLoggedIn");
+    localStorage.removeItem("isLoggedIn");
   };
 
-  const handleGoogleLogin = () => {
+  const handleGoogleLogin = async () => {
     setIsLoading(true);
-    signInWithPopup(auth, provider)
-      .then((userCredential) => {
-        const user = userCredential.user;
-        console.log("Logged in user:", user.uid);
-        setIsLoading(false);
-        dispatch(closeModal());
-        dispatch(logIn());
-        navigate("/for-you");
-        localStorage.setItem("IsLoggedIn", "true");
-      })
-      .catch((error) => {
-        const errorMessage = error.message;
-        console.error("Error logging in with Google:", errorMessage);
-        setIsLoading(false);
-        seterrorMessage(errorMessage);
-      });
+    try {
+      await setPersistence(auth, inMemoryPersistence);
+      const userCredential = await signInWithPopup(auth, provider);
+      const user = userCredential.user;
+      console.log("Logged in user:", user.uid);
+      setIsLoading(false);
+      dispatch(closeModal());
+      dispatch(logIn());
+      navigate("/for-you");
+      window.location.reload();
+      localStorage.setItem("isLoggedIn", "true");
+    } catch (error) {
+      const errorMessage = error.message;
+      console.error("Error logging in with Google:", errorMessage);
+      setIsLoading(false);
+      seterrorMessage(errorMessage);
+    }
   };
 
   const signInAnnom = () => {
@@ -84,9 +88,12 @@ export const Modal = () => {
           navigate("/for-you");
           dispatch(closeModal());
           dispatch(logIn());
+          localStorage.setItem("isLoggedIn", "true");
+          window.location.reload();
         })
         .finally(() => {
           setIsGuestLoading(false);
+          
         });
     }, 2500);
   };
@@ -98,22 +105,29 @@ export const Modal = () => {
   const handlePasswordChange = (event) => {
     setPasswordValue(event.target.value);
   };
-  const handleLoginWithEmailAndPassword = () => {
-    setIsLoading(true);
-    signInWithEmailAndPassword(auth, emailValue, passwordValue)
-      .then((userCredential) => {
-        const user = userCredential.user;
-        console.log("Logged in user:", user.uid);
-        setIsLoading(false);
-        dispatch(closeModal());
-        dispatch(logIn());
-      })
-      .catch((error) => {
-        const errorMessage = error.message;
-        console.error("Error logging in:", errorMessage);
-        setIsLoading(false);
-        seterrorMessage(errorMessage);
-      });
+  const handleLoginWithEmailAndPassword = async () => {
+    try {
+      setIsLoading(true);
+      await setPersistence(auth, inMemoryPersistence);
+      const userCredential = await signInWithEmailAndPassword(
+        auth,
+        emailValue,
+        passwordValue
+      );
+      const user = userCredential.user;
+      console.log("Logged in user:", user.uid);
+      setIsLoading(false);
+      dispatch(closeModal());
+      dispatch(logIn());
+      window.location.reload();
+      localStorage.setItem("isLoggedIn", "true");
+  
+    } catch (error) {
+      const errorMessage = error.message;
+      console.error("Error logging in:", errorMessage);
+      setIsLoading(false);
+      seterrorMessage(errorMessage);
+    }
   };
 
   useEffect(() => {
@@ -139,11 +153,6 @@ export const Modal = () => {
     };
   }, [isModalOpen]);
 
-  useEffect(() => {
-    if (isLoggedIn) {
-      navigate("/for-you");
-    }
-  }, [isLoggedIn, navigate]);
   return (
     <>
       <div className="modal-overlay">
@@ -156,9 +165,7 @@ export const Modal = () => {
                     {errorMessage && (
                       <div className="error-message">{errorMessage}</div>
                     )}
-                    {success && (
-                      <div className="error-message">{success}</div>
-                    )}
+                    {success && <div className="error-message">{success}</div>}
                   </div>
                   {accountless && (
                     <div className="modal-title">Log In To Summarist</div>

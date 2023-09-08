@@ -1,31 +1,31 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { AiOutlineHome, AiFillQuestionCircle } from "react-icons/ai";
 import { RiFlag2Line } from "react-icons/ri";
 import { FaPencilAlt } from "react-icons/fa";
 import { BiLogIn, BiLogOut } from "react-icons/bi";
 import { BsSearch, BsFillGearFill } from "react-icons/bs";
 import summary from "../../assets/logo.png";
-import { Link, useLocation, useParams } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { logOut } from "../../Redux/authSlice";
 import { openModal } from "../../Redux/LoginSlice";
 import { Modal } from "../UI/Modal";
 export const LeftBar = () => {
-  const { id } = useParams();
-  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
+  const [isLoggedIn, setIsLoggedIn] = useState(
+    localStorage.getItem("isLoggedIn") === "true"
+  );
   const isModalOpen = useSelector((state) => state.modal.isOpen);
   const dispatch = useDispatch();
-  const location = useLocation();
+  const {pathname} = useLocation();
 
   const handleWork = () => {
     if (isLoggedIn) {
       dispatch(logOut());
+      setIsLoggedIn(false);
+      localStorage.setItem("isLoggedIn", "false");
     } else {
       dispatch(openModal());
     }
-  };
-  const isSpecificPage = (path) => {
-    return location.pathname === path;
   };
 
   return (
@@ -35,10 +35,10 @@ export const LeftBar = () => {
           <img className="sidebar-img" src={summary} alt="" />
         </figure>
         <div
-          className={`sidebar-wrapper ${
-            isSpecificPage("/player/:id") ? "sidebar-wrapper-modified" : ""
-          }`}
-        >
+  className={`sidebar-wrapper ${
+    pathname.startsWith("/player/") ? "sidebar-wrapper-book" : ""
+  }`}
+>
           <div className="sidebar-navs">
             <Link to={"/for-you"}>
               <div className="sidebar-nav">
@@ -95,14 +95,9 @@ export const LeftBar = () => {
             <div className="sidebar-nav" onClick={handleWork}>
               <div className="sidebar-deactive sidebar-active"></div>
               <i className="sidebar-nav-icon">
-                {isLoggedIn ? (
-                  <BiLogOut onClick={handleWork} />
-                ) : (
-                  <BiLogIn onClick={handleWork} />
-                )}
+                {isLoggedIn ? <BiLogOut /> : <BiLogIn />}
               </i>
               <h1 className="sidebar-nav-title">
-                {" "}
                 {isLoggedIn ? "Logout" : "Login"}
               </h1>
             </div>

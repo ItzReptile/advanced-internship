@@ -2,6 +2,7 @@ import React, { useEffect, useState, useRef } from "react";
 import { SearchNav } from "../Components/Global/SearchNav";
 import { LeftBar } from "../Components/Global/LeftBar";
 import axios from "axios";
+import { useLocation } from 'react-router-dom';
 import { MdReplay10, MdForward10 } from "react-icons/md";
 import { AiFillPlayCircle, AiFillPauseCircle } from "react-icons/ai";
 import { useParams } from "react-router-dom";
@@ -15,6 +16,12 @@ export const Book = () => {
   const [duration, setDuration] = useState(0);
   const audioRef = useRef(null);
   const progressBarRef = useRef(null);
+  const [isBookPage, setIsBookPage] = useState(true); 
+
+
+
+
+
 
   async function fetchBookID() {
     try {
@@ -51,7 +58,7 @@ export const Book = () => {
       audioRef.current.currentTime = newTime;
     }
   };
-  
+
   const handleForward = () => {
     if (audioRef.current) {
       const newTime = Math.min(duration, audioRef.current.currentTime + 10);
@@ -94,7 +101,7 @@ export const Book = () => {
   return (
     <>
       <SearchNav />
-      <LeftBar />
+      <LeftBar/>
       <div className="book-info-wrapper">
         <div className="container">
           <div className="row">
@@ -118,10 +125,7 @@ export const Book = () => {
           </div>
           <div className="audio-btns">
             <div className="audio-btns-wrapper">
-              <button
-                  onClick={handleRewind}
-                className="audio-btn-control"
-              >
+              <button onClick={handleRewind} className="audio-btn-control">
                 <MdReplay10 />
               </button>
               <button
@@ -130,10 +134,7 @@ export const Book = () => {
               >
                 {isPlaying ? <AiFillPauseCircle /> : <AiFillPlayCircle />}
               </button>
-              <button
-                onClick={handleForward}
-                className="audio-btn-control"
-              >
+              <button onClick={handleForward} className="audio-btn-control">
                 <MdForward10 />
               </button>
             </div>

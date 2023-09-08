@@ -15,20 +15,21 @@ import { openModal } from "../Redux/LoginSlice";
 export const BookContent = () => {
   const { id } = useParams();
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
+  const [isSign, isSignIn] = useState(
+    localStorage.getItem("isLoggedIn" === "true")
+  );
   const [favBook, setfavBook] = useState(false);
   const [bookData, setBookData] = useState({});
   const [isLoading, setisLoading] = useState(true);
   const dispatch = useDispatch();
 
-
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const handleFavBook = () => {
     setfavBook(!favBook);
   };
 
-
   const handleReadButtonClick = () => {
-    if (!isLoggedIn) {
+    if (isLoggedIn) {
       dispatch(openModal());
     } else {
       navigate(`/player/${bookData.id}`);
@@ -55,7 +56,6 @@ export const BookContent = () => {
 
   return (
     <>
-     
       <LeftBar />
       <SearchNav />
       <div className="book-content">
@@ -146,7 +146,8 @@ export const BookContent = () => {
                   </>
                 ) : (
                   <div className="book-content-btn-wrappers">
-                    <div style={{cursor:"pointer"}}
+                    <div
+                      style={{ cursor: "pointer" }}
                       onClick={handleReadButtonClick}
                       className="book-content-btn"
                     >
@@ -155,7 +156,8 @@ export const BookContent = () => {
                       </i>
                       Read
                     </div>
-                    <div style={{cursor:"pointer"}}
+                    <div
+                      style={{ cursor: "pointer" }}
                       onClick={handleReadButtonClick}
                       className="book-content-btn"
                     >
