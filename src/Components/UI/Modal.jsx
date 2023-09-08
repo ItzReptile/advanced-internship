@@ -41,7 +41,6 @@ export const Modal = () => {
         console.log("User created:", user.uid);
         setIsLoading(false);
         setSuccessMessage("User created");
-    
       })
       .catch((error) => {
         const errorMessage = error.message;
@@ -58,25 +57,27 @@ export const Modal = () => {
     localStorage.removeItem("isLoggedIn");
   };
 
-  const handleGoogleLogin = async () => {
+  const handleGoogleLogin = () => {
     setIsLoading(true);
-    try {
-      await setPersistence(auth, inMemoryPersistence);
-      const userCredential = await signInWithPopup(auth, provider);
-      const user = userCredential.user;
-      console.log("Logged in user:", user.uid);
-      setIsLoading(false);
-      dispatch(closeModal());
-      dispatch(logIn());
-      navigate("/for-you");
-      window.location.reload();
-      localStorage.setItem("isLoggedIn", "true");
-    } catch (error) {
-      const errorMessage = error.message;
-      console.error("Error logging in with Google:", errorMessage);
-      setIsLoading(false);
-      seterrorMessage(errorMessage);
-    }
+    setPersistence(auth,inMemoryPersistence)
+    signInWithPopup(auth, provider)
+      .then((userCredential) => {
+        const user = userCredential.user;
+        console.log("Logged in user:", user.uid);
+        setIsLoading(false);
+        dispatch(closeModal());
+        dispatch(logIn());
+        navigate("/for-you");
+        window.location.reload();
+        localStorage.setItem("isLoggedIn", "true");
+       
+      })
+      .catch((error) => {
+        const errorMessage = error.message;
+        console.error("Error logging in with Google:", errorMessage);
+        setIsLoading(false);
+        seterrorMessage(errorMessage);
+      });
   };
 
   const signInAnnom = () => {
@@ -93,7 +94,6 @@ export const Modal = () => {
         })
         .finally(() => {
           setIsGuestLoading(false);
-          
         });
     }, 2500);
   };
@@ -105,29 +105,25 @@ export const Modal = () => {
   const handlePasswordChange = (event) => {
     setPasswordValue(event.target.value);
   };
-  const handleLoginWithEmailAndPassword = async () => {
-    try {
-      setIsLoading(true);
-      await setPersistence(auth, inMemoryPersistence);
-      const userCredential = await signInWithEmailAndPassword(
-        auth,
-        emailValue,
-        passwordValue
-      );
-      const user = userCredential.user;
-      console.log("Logged in user:", user.uid);
-      setIsLoading(false);
-      dispatch(closeModal());
-      dispatch(logIn());
-      window.location.reload();
-      localStorage.setItem("isLoggedIn", "true");
-  
-    } catch (error) {
-      const errorMessage = error.message;
-      console.error("Error logging in:", errorMessage);
-      setIsLoading(false);
-      seterrorMessage(errorMessage);
-    }
+  const handleLoginWithEmailAndPassword = () => {
+    setIsLoading(true);
+    setPersistence(auth,inMemoryPersistence)
+    signInWithEmailAndPassword(auth, emailValue, passwordValue)
+      .then((userCredential) => {
+        const user = userCredential.user;
+        console.log("Logged in user:", user.uid);
+        setIsLoading(false);
+        dispatch(closeModal());
+        dispatch(logIn());
+        window.location.reload();
+        localStorage.setItem("isLoggedIn", "true");
+      })
+      .catch((error) => {
+        const errorMessage = error.message;
+        console.error("Error logging in:", errorMessage);
+        setIsLoading(false);
+        seterrorMessage(errorMessage);
+      });
   };
 
   useEffect(() => {
