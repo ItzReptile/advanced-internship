@@ -6,13 +6,17 @@ import { useSelector, useDispatch } from "react-redux";
 
 import { openModal } from "../Redux/LoginSlice";
 import { logOut } from "../Redux/authSlice";
-export const Settings = () => {
-  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
 
+export const Settings = () => {
+  const [isLoggedIn, setIsLoggedIn] = useState(
+    localStorage.getItem("isLoggedIn") === "true"
+  );
   const dispatch = useDispatch();
   const handleWork = () => {
     if (isLoggedIn) {
       dispatch(logOut());
+      setIsLoggedIn(false);
+      localStorage.setItem("isLoggedIn", "false");
     } else {
       dispatch(openModal());
     }
@@ -47,8 +51,9 @@ export const Settings = () => {
                 <div className="sub-status">
                   <h2 className="sub-title">Your Subscription Plan</h2>
                   <h3 className="sub-status-des">Basic</h3>
-                  <a  href="/choose-plan" style={{width:200}} className="btn">Upgrade To Premium</a>
-                  
+                  <a href="/choose-plan" style={{ width: 200 }} className="btn">
+                    Upgrade To Premium
+                  </a>
                 </div>
                 <div className="sub-status">
                   <h2 className="sub-title">Email</h2>

@@ -132,7 +132,9 @@ export const ChoosePlan = () => {
                 </div>
               </div>
               <div className="choose-plan-billing-btn-wrapper">
-                <button className="btn" style={{ width: "350px" }}>
+                <button onClick={ () => 
+                  alert("Stripe Was Not Added")
+                } className="btn" style={{ width: "350px" }}>
                   Start Your{" "}
                   {selectedPlan === "yearly" ? "7-day Trial" : "First Month"}
                 </button>
