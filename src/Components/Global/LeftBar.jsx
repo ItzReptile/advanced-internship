@@ -16,7 +16,7 @@ export const LeftBar = () => {
   );
   const isModalOpen = useSelector((state) => state.modal.isOpen);
   const dispatch = useDispatch();
-  const {pathname} = useLocation();
+  const { pathname } = useLocation();
 
   const handleWork = () => {
     if (isLoggedIn) {
@@ -35,10 +35,10 @@ export const LeftBar = () => {
           <img className="sidebar-img" src={summary} alt="" />
         </figure>
         <div
-  className={`sidebar-wrapper ${
-    pathname.startsWith("/player/") ? "sidebar-wrapper-book" : ""
-  }`}
->
+          className={`sidebar-wrapper ${
+            pathname.startsWith("/player/") ? "sidebar-wrapper-book" : ""
+          }`}
+        >
           <div className="sidebar-navs">
             <Link to={"/for-you"}>
               <div className="sidebar-nav">

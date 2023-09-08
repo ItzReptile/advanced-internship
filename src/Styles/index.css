@@ -777,7 +777,8 @@ button:disabled {
   position: fixed;
   left: 0;
   top: 0;
-  height: 100vh;
+  height: 100%;
+  max-height: max-content;
   width: 360px;
   min-width: 200px;
   background-color: #f7faf9;
